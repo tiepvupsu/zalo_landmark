@@ -190,7 +190,7 @@ def print_eta(t0, cur_iter, total_iter):
     iter_done = cur_iter + 1
     iter_left = total_iter - cur_iter - 1
     second_left = time_so_far/float(iter_done) * iter_left
-    s0 = 'Iter: '+ str(cur_iter + 1) + '/' + str(total_iter) + ', time so far: ' \
+    s0 = 'Epoch: '+ str(cur_iter + 1) + '/' + str(total_iter) + ', time so far: ' \
         + second2str(time_so_far) + ', estimated time left: ' + second2str(second_left)
     print(s0)
 
