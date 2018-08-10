@@ -40,5 +40,7 @@ Mình đã thử nhưng chạy rất chậm, và kết quả giờ đã khá t�
 Tuy nhiên, thời gian huấn luyện có thể tăng lên. 
 
 3. Dùng thêm các mô hình được xây dựng riêng cho dạng landmark. 
-4. 
+
+
+**Star nếu bạn thấy repo này hữu ích.**
 
