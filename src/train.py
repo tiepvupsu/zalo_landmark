@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser(description='PyTorch Digital Mammography Traini
 
 parser.add_argument('--lr', default=1e-2, type=float, help='learning rate')
 parser.add_argument('--net_type', default='resnet', type=str, help='model')
-parser.add_argument('--depth', default=18, type=int, help='depth of model')
+parser.add_argument('--depth', default=18, choices = [18, 50, 152], type=int, help='depth of model')
 parser.add_argument('--weight_decay', default=5e-6, type=float, help='weight decay')
 parser.add_argument('--finetune', '-f', action='store_true', help='Fine tune pretrained model')
 parser.add_argument('--addlayer', '-a', action='store_true', help='Add additional layer in fine-tuning')

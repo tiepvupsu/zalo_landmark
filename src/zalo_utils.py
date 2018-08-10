@@ -122,6 +122,8 @@ class MyResNet(nn.Module):
 	    model = models.resnet18(pretrained)
 	elif depth == 50:
 	    model = models.resnet50(pretrained)
+        elif depth == 152:
+            model = models.resnet152(pretrained)
 
         self.num_ftrs = model.fc.in_features
         # self.num_classes = num_classes
