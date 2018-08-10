@@ -7,22 +7,16 @@ import argparse
 import copy
 import random
 from torchvision import transforms
-# import time
 import torch.backends.cudnn as cudnn
 import os, sys
 from time import time, strftime
-# from nets import load_model, parallelize_model
 
-parser = argparse.ArgumentParser(description='PyTorch Digital Mammography Training')
+parser = argparse.ArgumentParser(description='Zalo Landmark Identification Inference')
 parser.add_argument('--net_type', default='resnet', type=str, help='model')
 parser.add_argument('--depth', default=18, choices = [18, 50, 152], type=int, help='depth of model')
 parser.add_argument('--model_path', type=str, default = ' ')
 parser.add_argument('--batch_size', type=str, default = 512)
 
-parser.add_argument('--frozen_until', '-fu', type=int, default=7,
-                    help="freeze until --frozen_util block")
-parser.add_argument('--val_ratio', default=0.1, type=float, 
-        help = "number of training samples per class")
 args = parser.parse_args()
 
 KTOP = 3 # top k error
@@ -82,9 +76,8 @@ dset_loaders = {
 old_model = './checkpoint/' + 'resnet' + '-%s' % (args.depth) + '_' + args.model_path + '.t7'
 print("| Load pretrained at  %s..." % old_model)
 checkpoint = torch.load(old_model, map_location=lambda storage, loc: storage)
-tmp = checkpoint['model']
-# model = 
-model = unparallelize_model(tmp)
+model = checkpoint['model']
+model = unparallelize_model(model)
 model = parallelize_model(model)
 best_top3 = checkpoint['top3']
 print('previous top3\t%.4f'% best_top3)
@@ -96,7 +89,7 @@ header = 'id,predicted\n'
 f.write(header)
 torch.set_grad_enabled(False)
 model.eval()
-k = 3 # top 3 erro
+k = 3 # top 3 error
 tot = 0 
 for batch_idx, (inputs, labels, fns0) in enumerate(dset_loaders['test']):
     inputs = cvt_to_gpu(inputs)
