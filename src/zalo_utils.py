@@ -82,39 +82,6 @@ class MyDataset(Dataset):
         return image, self.lbs[idx], self.fns[idx]
 
 
-# def buildDataLoader(args):
-#     data_transforms = {
-# 	'train': transforms.Compose([
-# 	    transforms.RandomSizedCrop(224),
-# 	    transforms.RandomHorizontalFlip(),
-# 	    transforms.ToTensor(),
-# 	    transforms.Normalize(cf.mean, cf.std)
-# 	]),
-# 	'val': transforms.Compose([
-# 	    transforms.Scale(224),
-# 	    transforms.CenterCrop(224),
-# 	    transforms.ToTensor(),
-# 	    transforms.Normalize(cf.mean, cf.std)
-# 	]),
-#     }
-
-#     (train_filenames, train_labels, val_filenames, val_labels,
-#          retrieved_src_fns, retrieved_src_labels) = fns_and_labels(args)
-
-#     dsets = dict()
-#     dsets['train'] = MyDataset(train_filenames, train_labels, transform=data_transforms['train'])
-#     dsets['val'] = MyDataset(val_filenames, val_labels, transform=data_transforms['val'])
-#     dsets['src'] = MyDataset(retrieved_src_fns, retrieved_src_labels, transform=data_transforms['train'])
-
-#     dset_loaders = {
-#         x: torch.utils.data.DataLoader(dsets[x],
-#                                        batch_size=args.batch_size,
-#                                        shuffle=(x != 'val'),
-#                                        num_workers=8)
-#         for x in ['train', 'val', 'src']
-#     }
-
-
 class MyResNet(nn.Module):
     def __init__(self, depth, num_classes, pretrained = True):
         super(MyResNet, self).__init__()
@@ -139,20 +106,6 @@ class MyResNet(nn.Module):
         x = self.shared(x)
         x = torch.squeeze(x)
         return self.target(x)
-
-    # def predict(self, x, k=3):
-    #     outputs = self.forward(x)
-    #     topk = np.argsort(outputs.data.cpu.numpy(), axis = 1)[:, -k:][:, ::-1]
-    #     return topk
-
-    # def predict_dir(self, data_dir, k = 3):
-    #     """
-    #     predict image in a folder
-    #     """
-    #     # Step 1: List all images in a folder with ext .jpg
-    #     fns = [data_dir + fn for fn in os.listdir(data_dir) if fn.endswith('.jpg')]
-    #     lbs = [-1]*len(fns)
-    #     data_loader = MyDataset(fns, lbs)
 
     def frozen_until(self, to_layer):
         print('Frozen shared part until %d-th layer, inclusive'%to_layer)

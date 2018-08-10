@@ -221,7 +221,7 @@ if __name__ == "__main__":
             print('| Validation loss %.4f\tTop1error %.4f \tTop3error: %.4f'\
                     % (epoch_loss, top1error, top3error))
 
-            ################### save model base on best top3 error
+            ################### save model based on best top3 error
             if top3error < best_top3:
                 print('Saving model')
                 best_top3 = top3error
