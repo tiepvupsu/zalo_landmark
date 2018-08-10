@@ -35,7 +35,7 @@ parser.add_argument('--dropout_keep_prob', default=0.5, type=float)
 parser.add_argument('--check_after', default=2,
                     type=int, help='check the network after check_after epoch')
 parser.add_argument('--train_from', default=1,
-                    choices=[0, 1, 2],  # 0: last checkpoint, 1: beginning, 2: specific checkpoint in model_path
+                    choices=[0, 1, 2],  # 0: from scratch, 1: from pretrained Resnet, 2: specific checkpoint in model_path
                     type=int,
                     help="training from beginning (1) or from the most recent ckpt (0)")
 
@@ -238,4 +238,5 @@ if __name__ == "__main__":
                     os.mkdir(save_point)
 
                 torch.save(state, save_point + saved_model_fn + '.t7')
+                print('=======================================================================')
                 print('model saved to %s' % (save_point + saved_model_fn + '.t7'))
