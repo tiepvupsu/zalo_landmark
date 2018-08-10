@@ -26,9 +26,11 @@ Dự đoán địa điểm khi nhìn vào một bức ảnh chụp tại một �
 * Validation set: **Top 1 error: 0.0484, Top 3 error: 0.0085**
 
 
-First submission cho tập Public: **Top 3 error: 0.01859.**
+Second submission cho tập Public: **Top 3 error: 0.01859.**
 
 Như vậy tập dữ liệu này tương đối dễ. Chỉ với finetuning đã đạt được kết quả tốt. 
+
+**Tuy nhiên, vì dữ liệu training là 'skewed', rất có thể kết quả trên tập Private test sẽ thay đổi nhiều.**
 
 ### Một số ý tưởng
 
