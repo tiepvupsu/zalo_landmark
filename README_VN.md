@@ -14,7 +14,7 @@ Dự đoán địa điểm khi nhìn vào một bức ảnh chụp tại một �
 
 #### Một vài quan sát
 * Có 26 ảnh ở TrainVal bị lỗi, lúc training có thể bỏ qua các ảnh này. 
-* Có 3 ảnh ở Public bị lỗi, lúc nộp hơi báo lỗi vì file .csv thiếu ba dòng. Mình cho thêm ba dòng bằng `1, 0 0 0` vào để có thể nộp. Mặc nhiên ba dòng này sẽ bị sai, nhưng không ảnh hưởng nhiều tới kết quả. 
+* Có 3 ảnh ở Public bị lỗi. Khi nộp bài, hệ thống báo lỗi  báo lỗi vì file .csv thiếu ba dòng. Mình cho thêm ba dòng bằng `1, 0 0 0` vào để có thể nộp. Mặc nhiên ba dòng này sẽ bị sai, nhưng không ảnh hưởng nhiều tới kết quả. 
 
 ### Mô hình 
 
