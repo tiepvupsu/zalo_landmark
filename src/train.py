@@ -29,7 +29,7 @@ parser.add_argument('--trainer', default='adam', type = str, help = 'optimizer')
 parser.add_argument('--model_path', type=str, default = ' ')
 parser.add_argument('--batch_size', default=256, type=int)
 parser.add_argument('--num_workers', default=4, type=int)
-parser.add_argument('--num_epochs', default=100, type=int,
+parser.add_argument('--num_epochs', default=1500, type=int,
                     help='Number of epochs in training')
 parser.add_argument('--dropout_keep_prob', default=0.5, type=float)
 parser.add_argument('--check_after', default=2,
@@ -39,7 +39,7 @@ parser.add_argument('--train_from', default=1,
                     type=int,
                     help="training from beginning (1) or from the most recent ckpt (0)")
 
-parser.add_argument('--frozen_until', '-fu', type=int,
+parser.add_argument('--frozen_until', '-fu', type=int, default = 8,
                     help="freeze until --frozen_util block")
 parser.add_argument('--val_ratio', default=0.1, type=float, 
         help = "number of training samples per class")
@@ -52,7 +52,7 @@ KTOP = 3 # top k error
 def exp_lr_scheduler(args, optimizer, epoch):
     # after epoch 100, not more learning rate decay
     init_lr = args.lr
-    lr_decay_epoch = 10 # decay lr after each 10 epoch
+    lr_decay_epoch = 4 # decay lr after each 10 epoch
     weight_decay = args.weight_decay
     lr = init_lr * (0.6 ** (min(epoch, 200) // lr_decay_epoch)) 
 
