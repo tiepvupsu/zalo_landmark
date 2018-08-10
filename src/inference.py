@@ -95,9 +95,10 @@ for batch_idx, (inputs, labels, fns0) in enumerate(dset_loaders['test']):
     inputs = cvt_to_gpu(inputs)
     # labels = cvt_to_gpu(labels)
     #1 outputs = model.predict(inputs, k=3)
-    # pdb.set_trace()
     outputs = model(inputs)
     outputs = outputs.data.cpu().numpy()
+    # pdb.set_trace()
+    # topk = np.argsort(outputs, axis = 1)[:, -k:][:, ::-1]
     outputs = np.argsort(outputs, axis = 1)[:, -k:][:, ::-1]
     ########
     # write to file
