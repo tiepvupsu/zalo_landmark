@@ -1,4 +1,4 @@
-## Mô hình cơ bản cho cuộc thi Zalo Landmark Identification
+## Mô hình cơ bản cho cuộc thi [Zalo Landmark Identification](https://challenge.zalo.ai/portal/overview)
 
 ### Bài toán
 Dự đoán địa điểm khi nhìn vào một bức ảnh chụp tại một điểm du lịch ở Việt Nam. 
