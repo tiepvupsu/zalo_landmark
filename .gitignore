@@ -1,3 +1,4 @@
 *.t7
+data/
 *.pyc
 *.csv
