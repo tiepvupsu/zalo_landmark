@@ -30,6 +30,8 @@ First submission cho tập Public: **Top 3 error: 0.01859.**
 
 Như vậy tập dữ liệu này tương đối dễ. Chỉ với finetuning đã đạt được kết quả tốt. 
 
+**Tuy nhiên, vì dữ liệu training là 'skewed', rất có thể kết quả trên tập Private test sẽ thay đổi nhiều.**
+
 ### Một số ý tưởng
 
 1. Thử mô hình với các ResNet nhiều layer hơn (34, 50, 152). 
