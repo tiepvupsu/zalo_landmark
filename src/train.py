@@ -32,14 +32,14 @@ parser.add_argument('--num_workers', default=4, type=int)
 parser.add_argument('--num_epochs', default=100, type=int,
                     help='Number of epochs in training')
 parser.add_argument('--dropout_keep_prob', default=0.5, type=float)
-parser.add_argument('--check_after', default=10,
+parser.add_argument('--check_after', default=2,
                     type=int, help='check the network after check_after epoch')
 parser.add_argument('--train_from', default=1,
                     choices=[0, 1, 2],  # 0: last checkpoint, 1: beginning, 2: specific checkpoint in model_path
                     type=int,
                     help="training from beginning (1) or from the most recent ckpt (0)")
 
-parser.add_argument('--frozen_until', '-fu', type=int, default=7,
+parser.add_argument('--frozen_until', '-fu', type=int,
                     help="freeze until --frozen_util block")
 parser.add_argument('--val_ratio', default=0.1, type=float, 
         help = "number of training samples per class")
@@ -134,7 +134,6 @@ if __name__ == "__main__":
     ##################
     print('Start training ... ')
     criterion = nn.CrossEntropyLoss()
-
     model, optimizer = net_frozen(args, model)
     model = parallelize_model(model)
 

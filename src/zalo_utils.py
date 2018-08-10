@@ -190,7 +190,6 @@ def mytopk(pred, gt, k=3):
 
 def net_frozen(args, model):
     print('********************************************************')
-    
     model.frozen_until(args.frozen_until)
     init_lr = args.lr
     if args.trainer.lower() == 'adam':

@@ -16,7 +16,7 @@ from time import time, strftime
 
 parser = argparse.ArgumentParser(description='PyTorch Digital Mammography Training')
 parser.add_argument('--net_type', default='resnet', type=str, help='model')
-parser.add_argument('--depth', default=18, type=int, help='depth of model')
+parser.add_argument('--depth', default=18, choices = [18, 50, 152], type=int, help='depth of model')
 parser.add_argument('--model_path', type=str, default = ' ')
 parser.add_argument('--batch_size', type=str, default = 512)
 

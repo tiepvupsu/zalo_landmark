@@ -1,7 +1,9 @@
 ## A _baseline_ model for [Zalo Landmark Identification challenge](https://challenge.zalo.ai/portal/overview)
 
 ## Train 
+
 ```
+cd src
 python train.py
 ```
 
