@@ -1,7 +1,6 @@
 from __future__ import division
 from zalo_utils import *
 from sklearn.model_selection import train_test_split
-from utils import *
 import torch
 import torch.nn as nn
 import argparse
@@ -28,13 +27,21 @@ args = parser.parse_args()
 
 KTOP = 3 # top k error
 
+def gen_outputline(fn, preds):
+    idx = fn.split('/')[-1][:-4]
+    return  idx + ','+ str(preds)[1:-1].replace(',', '') +  '\n'
+
+
 data_dir = '../data/Public/'
 fn_all = [data_dir + fn for fn in os.listdir(data_dir) if fn.endswith('.jpg')]
 fns = []
+fn_corrupted = []
 for fn in fn_all:
     # filter dammaged images
     if os.path.getsize(fn) > 0:
         fns.append(fn)
+    else:
+        fn_corrupted.append(fn)
 
 print('Total provided files: {}'.format(len(fn_all)))
 print('Total damaged files: {}'.format(len(fn_all) - len(fns)))
@@ -93,22 +100,22 @@ k = 3 # top 3 erro
 tot = 0 
 for batch_idx, (inputs, labels, fns0) in enumerate(dset_loaders['test']):
     inputs = cvt_to_gpu(inputs)
-    # labels = cvt_to_gpu(labels)
-    #1 outputs = model.predict(inputs, k=3)
     outputs = model(inputs)
     outputs = outputs.data.cpu().numpy()
-    # pdb.set_trace()
-    # topk = np.argsort(outputs, axis = 1)[:, -k:][:, ::-1]
     outputs = np.argsort(outputs, axis = 1)[:, -k:][:, ::-1]
     ########
     # write to file
     for i in range(len(fns0)):
-        idx = fns0[i].split('/')[-1][:-4]
-        # print(idx)
-        tmp = idx + ','+ str(outputs[i, 0] )+ ' ' + str(outputs[i, 1]) + ' ' + str(outputs[i, 2]) +  '\n'
+        tmp = gen_outputline(fns0[i], list(outputs[i]))
         f.write(tmp)
+
     tot += len(fns0)
     print('processed {}/{}'.format(tot, len(fns)))
+
+# corrupted files
+for fn in fn_corrupted:
+    tmp = gen_outputline(fn, [0, 0, 0])
+    f.write(tmp)
 
 f.close()
 print('done')
