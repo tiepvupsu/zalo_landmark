@@ -1,7 +1,7 @@
 ## Mô hình cơ bản cho cuộc thi Zalo Landmark Identification
 
 ### Bài toán
-Cho bức ảnh của một điểm du lịch ở Việt Nam, dự đoán xem nó ở đâu. Chỉ cần dự đoán một đầu ra. 
+Dự đoán địa điểm khi nhìn vào một bức ảnh chụp tại một điểm du lịch ở Việt Nam. 
 
 ### Dữ liệu
 * 103 class: Ảnh các điểm du lịch ở Việt Nam, 480 x 480 
