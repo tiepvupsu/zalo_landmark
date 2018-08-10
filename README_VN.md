@@ -23,13 +23,12 @@ Dự đoán địa điểm khi nhìn vào một bức ảnh chụp tại một �
 * Chia 90% cho training set, 10% cho validation set
 * 2 GPUs
 * 30 epochs
-* **Top 1 error: 0.0484, Top 3 error: 0.0085**
+* Validation set: **Top 1 error: 0.0484, Top 3 error: 0.0085**
 
-Kết quả tương đối tốt. 
 
 First submission cho tập Public: **Top 3 error: 0.01859.**
 
-Như vậy tập dữ liệu này tương đối dễ. Chỉ với finetuning đã đạt được kết quả rất tốt. 
+Như vậy tập dữ liệu này tương đối dễ. Chỉ với finetuning đã đạt được kết quả tốt. 
 
 ### Một số ý tưởng
 
