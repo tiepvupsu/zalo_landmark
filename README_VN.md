@@ -42,5 +42,10 @@ Tuy nhiên, thời gian huấn luyện có thể tăng lên.
 
 3. Dùng thêm các mô hình được xây dựng riêng cho dạng landmark. 
 
+### Thảo luận ngoài
+
+
+* [Bài của bạn Nguyễn Xuân Bắc trên Forum Machine Learning cơ bản](https://www.facebook.com/groups/machinelearningcoban/permalink/529588034165275/)
+
 
 **Star nếu bạn thấy repo này hữu ích.**
