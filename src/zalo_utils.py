@@ -85,12 +85,12 @@ class MyDataset(Dataset):
 class MyResNet(nn.Module):
     def __init__(self, depth, num_classes, pretrained = True):
         super(MyResNet, self).__init__()
-	if depth == 18:
-	    model = models.resnet18(pretrained)
-        elif depth == 34:
-            model = models.resnet34(pretrained)
-	elif depth == 50:
-	    model = models.resnet50(pretrained)
+        if depth == 18:
+            model = models.resnet18(pretrained)
+            elif depth == 34:
+                model = models.resnet34(pretrained)
+        elif depth == 50:
+            model = models.resnet50(pretrained)
         elif depth == 152:
             model = models.resnet152(pretrained)
 
