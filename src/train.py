@@ -22,7 +22,7 @@ parser.add_argument('--finetune', '-f', action='store_true', help='Fine tune pre
 parser.add_argument('--trainer', default='adam', type = str, help = 'optimizer')
 parser.add_argument('--model_path', type=str, default = ' ')
 parser.add_argument('--batch_size', default=256, type=int)
-parser.add_argument('--num_workers', default=4, type=int)
+parser.add_argument('--num_workers', default=1, type=int)
 parser.add_argument('--num_epochs', default=1500, type=int,
                     help='Number of epochs in training')
 parser.add_argument('--dropout_keep_prob', default=0.5, type=float)
@@ -77,7 +77,7 @@ print('DataLoader ....')
 mean=[0.485, 0.456, 0.406]
 std=[0.229, 0.224, 0.225]
 # input_size = 224
-input_size = 448
+input_size = 224 
 
 data_transforms = {
     'train': transforms.Compose([
@@ -102,7 +102,7 @@ dset_loaders = {
     x: torch.utils.data.DataLoader(dsets[x],
                                    batch_size=args.batch_size,
                                    shuffle=(x != 'val'),
-                                   num_workers=8)
+                                   num_workers=args.num_workers)
     for x in ['train', 'val']
 }
 ########## 

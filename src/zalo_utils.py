@@ -26,7 +26,6 @@ def get_fns_lbs(base_dir, json_file, pickle_fn = 'mydata.p', force = False):
 
     f = open(json_file, 'r')
     line = f.readlines()[0] # only one line 
-    
     end = 0 
     id_marker = '\\"id\\": '
     cate_marker = '\\"category\\": '
@@ -76,7 +75,6 @@ class MyDataset(Dataset):
         tmp = image.getpixel((0, 0))
         if isinstance(tmp, int) or len(tmp) != 3: # not rgb image
             image = image.convert("RGB")
-        # image = Image.fromarray(cv2.imread(self.fns[idx], 1)[:, :, ::-1]) # color
         if self.transform:
             image = self.transform(image)
         return image, self.lbs[idx], self.fns[idx]
@@ -143,6 +141,7 @@ def mytopk(pred, gt, k=3):
     topk_error = float(n_correct)/pred.shape[0]
     return n_correct, topk_error
 
+
 def net_frozen(args, model):
     print('********************************************************')
     model.frozen_until(args.frozen_until)
@@ -156,12 +155,14 @@ def net_frozen(args, model):
     print('********************************************************')
     return model, optimizer
 
+
 def parallelize_model(model):
     if torch.cuda.is_available():
         model = model.cuda()
         model = torch.nn.DataParallel(model, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
     return model
+
 
 def unparallelize_model(model):
     try:
@@ -172,12 +173,14 @@ def unparallelize_model(model):
         pass
     return model
 
+
 def second2str(second):
     h = int(second/3600.)
     second -= h*3600.
     m = int(second/60.)
     s = int(second - m*60)
     return "{:d}:{:02d}:{:02d} (s)".format(h, m, s)
+
 
 def print_eta(t0, cur_iter, total_iter):
     """
