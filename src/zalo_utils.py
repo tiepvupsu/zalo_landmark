@@ -87,8 +87,8 @@ class MyResNet(nn.Module):
         super(MyResNet, self).__init__()
         if depth == 18:
             model = models.resnet18(pretrained)
-            elif depth == 34:
-                model = models.resnet34(pretrained)
+        elif depth == 34:
+            model = models.resnet34(pretrained)
         elif depth == 50:
             model = models.resnet50(pretrained)
         elif depth == 152:
