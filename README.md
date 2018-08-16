@@ -1,5 +1,11 @@
 ## A _baseline_ model for [Zalo Landmark Identification challenge](https://challenge.zalo.ai/portal/overview)
 
+## Get code
+```
+git clone https://github.com/tiepvupsu/zalo_landmark
+cd zalo_landmark
+```
+
 ## Train 
 
 ```
