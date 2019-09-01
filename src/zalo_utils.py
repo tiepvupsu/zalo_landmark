@@ -5,58 +5,37 @@ from torch.utils.data import Dataset
 import torchvision.models as models
 import torch
 import torch.nn as nn
-import pickle
-import pdb
 import torch.optim as optim
 from PIL import Image
 import numpy as np
 import random
 import torch.backends.cudnn as cudnn
 from time import time
+import pandas as pd
+from collections import defaultdict
 
-def get_fns_lbs(base_dir, json_file, pickle_fn = 'mydata.p', force = False):    
-    pickle_fn = base_dir + pickle_fn 
-    # pdb.set_trace() 
-    if os.path.isfile(pickle_fn) and not force:
-        mydata = pickle.load(open(pickle_fn, 'rb'))
-        fns = mydata['fns']
-        lbs = mydata['lbs']
-        cnt = mydata['cnt']
-        return fns, lbs, cnt
 
-    f = open(json_file, 'r')
-    line = f.readlines()[0] # only one line 
-    end = 0 
-    id_marker = '\\"id\\": '
-    cate_marker = '\\"category\\": '
-    cnt = 0 
-    fns = [] # list of all image filenames
-    lbs = [] # list of all labels
-    while True:
-        start0 = line.find(id_marker, end)
-        if start0 == -1: break 
-        start_id = start0 + len(id_marker)
-        end_id = line.find(',', start_id) 
+def get_fns_lbs(base_dir, csv_path):
+    all_df = pd.read_csv(csv_path)
+    fns = list(all_df.image)
+    filenames = [os.path.join(base_dir, fn) for fn in fns]
+    labels = list(all_df.label)
+    return filenames, labels
 
-        start0 = line.find(cate_marker, end_id)
-        start_cate = start0 + len(cate_marker)
-        end_cate = line.find('}', start_cate)
 
-        end = end_cate
-        cnt += 1
-        cl = line[start_cate:end_cate]
-        fn = base_dir + cl + '/' + line[start_id:end_id] + '.jpg'
-        if os.path.getsize(fn) == 0: # zero-byte files 
-            continue 
-        lbs.append(int(cl))
-        fns.append(fn)
+def _get_images_labels(all_images, all_labels, num_classes=2):
+    image_to_label_dict = defaultdict(list)
+    for image, label in zip(all_images, all_labels):
+        image_to_label_dict[label].append(image)
 
-    # pdb.set_trace()
-    mydata = {'fns':fns, 'lbs':lbs, 'cnt':cnt}
-    pickle.dump(mydata, open(pickle_fn, 'wb'))
-    print(os.path.isfile(pickle_fn))
+    images = []
+    labels = []
+    for c in range(num_classes):
+        images.extend(image_to_label_dict[c])
+        labels.extend([c]*len(image_to_label_dict[c]))
 
-    return fns, lbs, cnt 
+    return images, labels
+
 
 class MyDataset(Dataset):
 
@@ -124,7 +103,7 @@ class MyResNet(nn.Module):
             child_counter += 1
 
 
-def mytopk(pred, gt, k=3):
+def mytopk(pred, gt, k=5):
     """
     compute topk error
     pred: (n_sample,n_class) np array
@@ -147,11 +126,11 @@ def net_frozen(args, model):
     model.frozen_until(args.frozen_until)
     init_lr = args.lr
     if args.trainer.lower() == 'adam':
-        optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), 
-                lr=init_lr, weight_decay=args.weight_decay)
+        optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()),
+                               lr=init_lr, weight_decay=args.weight_decay)
     elif args.trainer.lower() == 'sgd':
-        optimizer = optim.SGD(filter(lambda p: p.requires_grad, model.parameters()), 
-                lr=init_lr,  weight_decay=args.weight_decay)
+        optimizer = optim.SGD(filter(lambda p: p.requires_grad, model.parameters()),
+                              lr=init_lr,  weight_decay=args.weight_decay)
     print('********************************************************')
     return model, optimizer
 

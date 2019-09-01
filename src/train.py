@@ -1,7 +1,7 @@
 from __future__ import division
-from zalo_utils import *
 from sklearn.model_selection import train_test_split
 # from utils import *
+import zalo_utils
 import torch
 import torch.nn as nn
 import argparse
@@ -38,7 +38,7 @@ parser.add_argument('--val_ratio', default=0.1, type=float,
         help = "number of training samples per class")
 args = parser.parse_args()
 
-KTOP = 3 # top k error
+KTOP = 3  # top k error
 
 def exp_lr_scheduler(args, optimizer, epoch):
     # after epoch 100, not more learning rate decay
@@ -56,15 +56,18 @@ def exp_lr_scheduler(args, optimizer, epoch):
 
 use_gpu = torch.cuda.is_available()
 
-json_file = '../data/train_val2018.json'
+# json_file = '../data/train_val2018.json'
 data_dir = '../data/TrainVal/'
+data_dir = '../../vn_celeb_classification/data/train/'
 
 print('Loading data')
-fns, lbs, cnt = get_fns_lbs(data_dir, json_file)
+fns, lbs = zalo_utils.get_fns_lbs(data_dir, '../../vn_celeb_classification/data/train.csv')
+
+fns, lbs = zalo_utils._get_images_labels(fns, lbs, 10)
     
-print('Total files in the original dataset: {}'.format(cnt))
-print('Total files with > 0 byes: {}'.format(len(fns)))
-print('Total files with zero bytes {}'.format(cnt - len(fns)))
+# print('Total files in the original dataset: {}'.format(cnt))
+# print('Total files with > 0 byes: {}'.format(len(fns)))
+# print('Total files with zero bytes {}'.format(cnt - len(fns)))
 
 ############################333
 print('Split data')
@@ -77,7 +80,7 @@ print('DataLoader ....')
 mean=[0.485, 0.456, 0.406]
 std=[0.229, 0.224, 0.225]
 # input_size = 224
-input_size = 224 
+input_size = 224
 
 data_transforms = {
     'train': transforms.Compose([
@@ -95,8 +98,8 @@ data_transforms = {
 }
 
 dsets = dict()
-dsets['train'] = MyDataset(train_fns, train_lbs, transform=data_transforms['train'])
-dsets['val'] = MyDataset(val_fns, val_lbs, transform=data_transforms['val'])
+dsets['train'] = zalo_utils.MyDataset(train_fns, train_lbs, transform=data_transforms['train'])
+dsets['val'] = zalo_utils.MyDataset(val_fns, val_lbs, transform=data_transforms['val'])
 
 dset_loaders = {
     x: torch.utils.data.DataLoader(dsets[x],
@@ -114,18 +117,18 @@ if args.train_from == 2 and os.path.isfile(old_model):
     print("| Load pretrained at  %s..." % old_model)
     checkpoint = torch.load(old_model, map_location=lambda storage, loc: storage)
     tmp = checkpoint['model']
-    model = unparallelize_model(tmp)
+    model = zalo_utils.unparallelize_model(tmp)
     best_top3 = checkpoint['top3']
     print('previous top3\t%.4f'% best_top3)
     print('=============================================')
 else:
-    model = MyResNet(args.depth, len(set(train_lbs)))
+    model = zalo_utils.MyResNet(args.depth, len(set(train_lbs)))
 
 ##################
 print('Start training ... ')
 criterion = nn.CrossEntropyLoss()
-model, optimizer = net_frozen(args, model)
-model = parallelize_model(model)
+model, optimizer = zalo_utils.net_frozen(args, model)
+model = zalo_utils.parallelize_model(model)
 
 N_train = len(train_lbs)
 N_valid = len(val_lbs)
@@ -147,8 +150,8 @@ for epoch in range(args.num_epochs):
     # local_src_data = None
     for batch_idx, (inputs, labels, _) in enumerate(dset_loaders['train']):
         optimizer.zero_grad()
-        inputs = cvt_to_gpu(inputs)
-        labels = cvt_to_gpu(labels)
+        inputs = zalo_utils.cvt_to_gpu(inputs)
+        labels = zalo_utils.cvt_to_gpu(labels)
         outputs = model(inputs)
         loss = criterion(outputs, labels)
         running_loss += loss*inputs.shape[0]
@@ -157,7 +160,7 @@ for epoch in range(args.num_epochs):
         ############################################
         _, preds = torch.max(outputs.data, 1)
         # topk 
-        top3correct, _ = mytopk(outputs.data.cpu().numpy(), labels, KTOP)
+        top3correct, _ = zalo_utils.mytopk(outputs.data.cpu().numpy(), labels, KTOP)
         runnning_topk_corrects += top3correct
         # pdb.set_trace()
         running_loss += loss.item()
@@ -184,7 +187,7 @@ for epoch in range(args.num_epochs):
     print('\n| Training loss %.4f\tTop1error %.4f \tTop3error: %.4f'\
             % (epoch_loss, top1error, top3error))
 
-    print_eta(t0, epoch, args.num_epochs)
+    # print_eta(t0, epoch, args.num_epochs)
 
     ###################################
     ## Validation
@@ -195,11 +198,11 @@ for epoch in range(args.num_epochs):
         torch.set_grad_enabled(False)
         model.eval()
         for batch_idx, (inputs, labels, _) in enumerate(dset_loaders['val']):
-            inputs = cvt_to_gpu(inputs)
-            labels = cvt_to_gpu(labels)
+            inputs = zalo_utils.cvt_to_gpu(inputs)
+            labels = zalo_utils.cvt_to_gpu(labels)
             outputs = model(inputs)
             _, preds  = torch.max(outputs.data, 1)
-            top3correct, top3error = mytopk(outputs.data.cpu().numpy(), labels, KTOP)
+            top3correct, top3error = zalo_utils.mytopk(outputs.data.cpu().numpy(), labels, KTOP)
             runnning_topk_corrects += top3correct
             running_loss += loss.item()
             running_corrects += preds.eq(labels.data).cpu().sum()
@@ -218,7 +221,7 @@ for epoch in range(args.num_epochs):
             best_model = copy.deepcopy(model)
             state = {
                 'model': best_model,
-                'top3' : best_top3,
+                'top3': best_top3,
                 'args': args
             }
             if not os.path.isdir('checkpoint'):
